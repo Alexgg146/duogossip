@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ДуэтСплетниц</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Иконка для Apple устройств -->
+<link rel="apple-touch-icon" sizes="180x180" href="earth_10639144.png">
+
+<!-- Основная иконка для браузеров -->
+<link rel="icon" type="image/png" sizes="32x32" href="earth_10639144.png">
+<link rel="icon" type="image/png" sizes="16x16" href="earth_10639144.png">
+
+<!-- Манифест для иконок на Android -->
+<link rel="manifest" href="earth_10639144.png">
+    <style>
+        /* Общие стили */
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #1a1a1a;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            overflow: auto;
+            scroll-behavior: auto;
+            box-sizing: border-box;
+        }
+
+        h1,
+        h2 {
+            color: #ffcc00;
+            text-shadow: 0px 0px 10px #fff;
+        }
+
+        /* Футер */
+        footer {
+            width: 100%;
+            padding: 10px;
+            background: #000;
+            color: #ffcc00;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Центрирование контента */
+        .container {
+            max-width: 100%;
+            padding: 80px 20px 20px;
+            z-index: 10;
+        }
+
+        .section {
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            margin-bottom: 10px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        }
+
+        /* Гороскопы: два блока по горизонтали */
+        .horoscope-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .horoscope-block {
+            flex: 1;
+            background-color: #2a2a2a;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+            min-width: 200px;
+        }
+
+        /* Поля ввода и кнопки */
+        input[type="text"] {
+            padding: 8px;
+            width: 75%;
+            border: 1px solid #ffcc00;
+            border-radius: 5px;
+            margin: 5px 0;
+            color: #000;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #ffcc00;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 5px 0;
+            transition: background-color 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        button:hover {
+            background-color: #ffaa00;
+        }
+
+        .note-list,
+        .gossip-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .note-list li,
+        .gossip-list li {
+            margin-bottom: 8px;
+            padding: 8px;
+            border: 1px solid #ffcc00;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .note-controls {
+            display: flex;
+            align-items: center;
+        }
+
+        .note-controls button {
+            margin-left: 5px;
+            background-color: #ffcc00;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all 0.3s;
+            color: white;
+            font-size: 12px;
+        }
+
+        .note-controls button.done {
+            background-color: green;
+        }
+
+        .note-controls button.remove {
+            background-color: red;
+        }
+
+        /* Анимация звездного фона */
+        .stars {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 0;
+            background: transparent;
+            overflow: hidden;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 5s infinite alternate ease-in-out;
+        }
+
+        @keyframes twinkle {
+            0% {
+                transform: scale(0.8);
+                opacity: 0.5;
+            }
+
+            50% {
+                transform: scale(1.2);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(0.8);
+                opacity: 0.5;
+            }
+        }
+
+        /* Кнопка "Шар" */
+        .ball-button {
+            background-color: #ffcc00;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            z-index: 10;
+            color: white;
+            font-size: 14px;
+        }
+
+        .ball-button:hover {
+            background-color: #ffaa00;
+        }
+
+        /* Печенье */
+        .cookie-section {
+            margin: 20px 0;
+        }
+
+        .cookie {
+            width: 100px;
+            height: 100px;
+            background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Chocolate_chip_cookie_2.jpg/800px-Chocolate_chip_cookie_2.jpg') no-repeat center;
+            background-size: cover;
+            margin: 0 auto;
+            cursor: pointer;
+            transition: transform 0.5s;
+            border-radius: 50%;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+        }
+
+        .cookie.open {
+            transform: scale(1.1);
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0% {
+                transform: scale(1);
+            }
+
+            25% {
+                transform: scale(1.05);
+            }
+
+            50% {
+                transform: scale(1);
+            }
+
+            75% {
+                transform: scale(0.95);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .prediction {
+            display: none;
+            margin-top: 10px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+        }
+
+        /* Мобильная адаптация */
+        @media (max-width: 100px) {
+            .horoscope-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .horoscope-block {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+</head>
+
+<body>
+    <div class="stars"></div>
+        <button class="ball-button" onclick="window.location.href='https://alexgg146.github.io/forAnastasia/assets/index.html';">Шар</button>
+
+    <!-- Основной контент -->
+    <div class="container">
+        <div class="section" id="horoscope-section">
+            <h2>Гороскопы</h2>
+            <div class="horoscope-container">
+                <div class="horoscope-block">
+                    <h3>Стрелец: <span id="sagittarius-horoscope"></span></h3>
+                </div>
+                <div class="horoscope-block">
+                    <h3>Близнецы: <span id="gemini-horoscope"></span></h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- Печенье с предсказаниями -->
+        <div class="cookie-section">
+            <h2>Печенье с предсказаниями</h2>
+            <div class="cookie" onclick="openCookie()"></div>
+            <div class="prediction" id="cookie-prediction"></div>
+        </div>
+
+        <!-- Раздел Пьяные разговоры -->
+        <div class="section">
+            <h2>Пьяные разговоры</h2>
+            <input type="text" id="note-input" placeholder="Добавить разговор...">
+            <button onclick="addNote()">Добавить</button>
+            <ul class="note-list" id="note-list"></ul>
+        </div>
+
+        <!-- Раздел Сплетни перебор -->
+        <div class="section">
+            <h2>Сплетни Перебор</h2>
+            <input type="text" id="gossip-input" placeholder="Добавить сплетню...">
+            <button onclick="addGossip()">Добавить</button>
+            <ul class="gossip-list" id="gossip-list"></ul>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy;kirov Все права защищены звёздами.</p>
+    </footer>
+
+    <script>
+        // Firebase config и инициализация
+        const firebaseConfig = {
+ apiKey: "AIzaSyD7OP9BW9YyCADyNWIXUj9a6oSKpA19-fs",
+ authDomain: "megasite-904a0.firebaseapp.com",
+ databaseURL: "https://megasite-904a0-default-rtdb.europe-west1.firebasedatabase.app",
+ projectId: "megasite-904a0",
+ storageBucket: "megasite-904a0.appspot.com",
+ messagingSenderId: "541215114287",
+ appId: "1:541215114287:web:10bcb977e14de193be32da"
+};
+
+        // Инициализация Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // Пьяные разговоры
+        let notes = [];
+
+        // Получение данных из Firestore при загрузке страницы
+        db.collection('notes').get().then((snapshot) => {
+            snapshot.forEach((doc) => {
+                notes.push(doc.data());
+            });
+            renderNotes(); // отображаем заметки
+        });
+
+        // Добавление новой заметки
+        function addNote() {
+            const noteInput = document.getElementById('note-input');
+            const newNote = { text: noteInput.value, done: false };
+
+            if (newNote.text.trim() !== "") {
+                notes.push(newNote);
+
+                // Добавляем заметку в Firestore
+                db.collection('notes').add(newNote)
+                    .then(() => {
+                        console.log('Заметка добавлена');
+                    })
+                    .catch((error) => {
+                        console.error('Ошибка при добавлении заметки:', error);
+                    });
+
+                noteInput.value = '';
+                renderNotes();
+            }
+        }
+
+        // Изменение статуса заметки
+        function toggleNoteDone(index) {
+            const note = notes[index];
+            note.done = !note.done;
+
+            // Обновляем статус заметки в Firestore
+            db.collection('notes').where("text", "==", note.text).get().then((snapshot) => {
+                snapshot.forEach((doc) => {
+                    db.collection('notes').doc(doc.id).update({ done: note.done });
+                });
+            });
+
+            renderNotes();
+        }
+
+        // Удаление заметки
+        function removeNote(index) {
+            const note = notes[index];
+
+            // Удаляем заметку из Firestore
+            db.collection('notes').where("text", "==", note.text).get().then((snapshot) => {
+                snapshot.forEach((doc) => {
+                    db.collection('notes').doc(doc.id).delete();
+                });
+            });
+
+            notes.splice(index, 1);
+            renderNotes();
+        }
+
+        function renderNotes() {
+            const noteList = document.getElementById('note-list');
+            noteList.innerHTML = '';
+            notes.forEach((note, index) => {
+                const noteItem = document.createElement('li');
+                noteItem.innerHTML = `
+                    <span>${note.text}</span>
+                    <div class="note-controls">
+                        <button class="${note.done ? 'done' : ''}" onclick="toggleNoteDone(${index})">✔</button>
+                        <button class="remove" onclick="removeNote(${index})">✖</button>
+                    </div>
+                `;
+                noteList.appendChild(noteItem);
+            });
+        }
+
+        // Сплетни
+        let gossips = [];
+
+        // Получение данных из Firestore для сплетен
+        db.collection('gossips').get().then((snapshot) => {
+            snapshot.forEach((doc) => {
+                gossips.push(doc.data());
+            });
+            renderGossips(); // отображаем сплетни
+        });
+
+        function addGossip() {
+            const gossipInput = document.getElementById('gossip-input');
+            const newGossip = { text: gossipInput.value, done: false };
+
+            if (newGossip.text.trim() !== "") {
+                gossips.push(newGossip);
+
+                // Добавляем сплетню в Firestore
+                db.collection('gossips').add(newGossip)
+                    .then(() => {
+                        console.log('Сплетня добавлена');
+                    })
+                    .catch((error) => {
+                        console.error('Ошибка при добавлении сплетни:', error);
+                    });
+
+                gossipInput.value = '';
+                renderGossips();
+            }
+        }
+
+        function toggleGossipDone(index) {
+            const gossip = gossips[index];
+            gossip.done = !gossip.done;
+
+            // Обновляем статус сплетни в Firestore
+            db.collection('gossips').where("text", "==", gossip.text).get().then((snapshot) => {
+                snapshot.forEach((doc) => {
+                    db.collection('gossips').doc(doc.id).update({ done: gossip.done });
+                });
+            });
+
+            renderGossips();
+        }
+
+        function removeGossip(index) {
+            const gossip = gossips[index];
+
+            // Удаляем сплетню из Firestore
+            db.collection('gossips').where("text", "==", gossip.text).get().then((snapshot) => {
+                snapshot.forEach((doc) => {
+                    db.collection('gossips').doc(doc.id).delete();
+                });
+            });
+
+            gossips.splice(index, 1);
+            renderGossips();
+        }
+
+        function renderGossips() {
+            const gossipList = document.getElementById('gossip-list');
+            gossipList.innerHTML = '';
+            gossips.forEach((gossip, index) => {
+                const gossipItem = document.createElement('li');
+                gossipItem.innerHTML = `
+                    <span>${gossip.text}</span>
+                    <div class="note-controls">
+                        <button class="${gossip.done ? 'done' : ''}" onclick="toggleGossipDone(${index})">✔</button>
+                        <button class="remove" onclick="removeGossip(${index})">✖</button>
+                    </div>
+                `;
+                gossipList.appendChild(gossipItem);
+            });
+        }
+
+        // Печенье с предсказаниями
+        const predictions = [
+           "Сегодня вам нужно выпить бокал вина у воды – это откроет новые горизонты",
+"Пора взять кальян и отправиться на прогулку – свежий воздух поможет решить все вопросы",
+"Не забудьте посетить бар с друзьями, кружка пива принесёт неожиданные новости",
+"Ваш день будет идеальным, если вы проведёте его в бане с вином и хорошей компанией",
+"Сегодня удача придёт к вам во время прогулки по набережной с бутылкой вина",
+"Проведите вечер с кальяном на крыше – это поможет вам обрести внутреннюю гармонию",
+"Пора устроить пикник с вином на природе – это зарядит вас энергией",
+"Сегодня нужно отправиться в бар с друзьями – там ждёт важный разговор",
+"Вино на берегу реки подарит вам ответы на давно волнующие вопросы",
+"Кальян и хороший вид из окна помогут вам сегодня успокоиться и найти решение проблемы",
+"Звёзды говорят, что сегодня нужно расслабиться с бокалом вина на закате",
+"Соберите друзей и отправляйтесь на природу с пивом – это принесёт новые идеи",
+"Утро начнётся удачно, если вы выпьете бокал вина на свежем воздухе",
+"Пора сделать паузу и провести вечер с кальяном – это добавит ясности в мысли",
+"Сегодняшний день обещает быть удачным, если вы проведёте его за кружкой пива с другом"
+        ];
+
+        function openCookie() {
+            const cookie = document.querySelector('.cookie');
+            const predictionElement = document.getElementById('cookie-prediction');
+            const randomPrediction = predictions[Math.floor(Math.random() * predictions.length)];
+
+            cookie.classList.add('open');
+            predictionElement.textContent = randomPrediction;
+            predictionElement.style.display = 'block';
+
+            setTimeout(() => {
+                cookie.classList.remove('open');
+            }, 1000);
+        }
+
+         // Гороскопы
+         const sagittariusHoroscopes = [
+        "Сегодня стерльцам обязательно нужно посетить Дагестан.",
+    "Будте готовы, сегодня вам не обойтись без кальяна рядом с водой на берегу.",
+    "День требует от вас максимальной концентрации в бане с пивом.",
+    "Уделите время своему здоровью, покатайтесь с горки на водохранилище.",
+    "Отличный день для творческой деятельности, нужно с Анастасией спокойно кататься с мышью на машине, слушая нравоучения.",
+    "Возможно получение интересного предложения, лучше всего в жестких барах в Москве.",
+    "Не спешите с выводами, подумайте хватит ли вам только пива.",
+    "Пора петь песню золотые купола и снять кружок об этом",
+    "Стрельцам по имени Александр нужно срочно выпить пива.",
+    "Пора пить пиво, обратитесь к Анастасии с данным предложением.",
+    "Сегодня стрельцам нужно срочно прыгнуть с парашютом в Дагестане, кальян на вершине горы – то, что спасет ваш день",
+"Обязательно проведите время у воды с чашкой кофе, лучше всего на берегу Волги, не забудьте взять с собой кальян и хорошую компанию",
+"День обещает быть продуктивным, если вы проведёте его в сауне с пивом, не исключено, что именно в парной придёт к вам гениальная идея",
+"Сегодня вам следует погулять по набережной с пивом в руках, чем дольше будете наслаждаться видом, тем лучше сложатся обстоятельства",
+"Ваш день пройдёт идеально, если вы посвятите его курению кальяна с друзьями на крыше дома, не забудьте про приятную музыку – она добавит нужного настроя",
+"Сегодня для стрельцов важно расслабиться на берегу реки с бутылкой пива, вода успокоит ваши мысли, а пиво добавит уюта",
+"Звёзды советуют вам сегодня взять кальян и подняться в горы, пейзаж вокруг настроит на философские размышления",
+"Если у вас сегодня появится возможность, отправляйтесь в баню с хорошим другом и бутылкой пива, это лучшее средство для обдумывания важных решений",
+"Сегодня стрельцы могут смело собираться на шашлыки у водоёма, главное – не забудьте про кальян и мясо, иначе вечер будет испорчен",
+"Сегодня вам лучше всего провести время, катаясь на лодке с бутылкой пива, вода очистит мысли, а пиво добавит вдохновения",
+"Для стрельцов сегодня идеально подойдёт день на даче с шашлыками и кальяном, обсудите с друзьями планы на будущее под звуки природы",
+"День требует от вас прогулки по лесу с фляжкой вина и кальяном в рюкзаке, это отличное время для размышлений о жизни и судьбе",
+"Сегодня вам стоит отправиться на дачу, собрать друзей и устроить пикник с пивом и кальяном, свежий воздух и лёгкий дым настроят вас на позитив",
+"Для стрельцов сегодня идеален поход в горы с кальяном и бутылкой хорошего вина, возможно, вы найдёте ответы на вопросы, которые вас давно тревожат",
+"Звезды советуют стрельцам сегодня устроить посиделки у костра с пивом и гитарой, время на природе с друзьями даст вам новые силы",
+"Сегодня отличный день для того, чтобы расслабиться на пляже с бутылкой пива и кальяном, солнце и вода поднимут настроение и дадут заряд энергии",
+"Вечером стрельцам лучше всего провести время в баре, обсуждая философские вопросы за кружкой пива, не исключено, что эта беседа даст вам новые идеи",
+"Сегодняшний день обещает быть удачным, если вы посвятите его спокойной прогулке по городу с фляжкой вина, слушайте музыку и наслаждайтесь моментом – это ваше время",
+"Для стрельцов сегодня важно отправиться на рыбалку с пивом и кальяном, это поможет вам настроиться на нужную волну и расслабиться",
+"Звезды советуют вам сегодня провести вечер в компании друзей за кружкой пива и кальяном, это время для душевных разговоров и смелых идей",
+"Сегодняшний день станет удачным, если вы проведёте его, катаясь на велосипеде с бутылкой пива в рюкзаке, это придаст вам энергии и вдохновения для новых начинаний",
+"Сегодня стрельцам стоит устроить пикник на берегу реки с кальяном и пивом, свежий воздух поможет вам обрести гармонию и спокойствие",
+"День обещает быть интересным, если вы проведёте его в походе с кальяном и друзьями, обсуждение будущих планов под звёздами принесет хорошие идеи",
+"Сегодня отличное время для прогулки на катере с бокалом пива в руке, вода и ветер помогут вам сбросить накопившееся напряжение",
+"Звезды советуют стрельцам отправиться в бар и попробовать новое пиво, возможно, именно там вы встретите важного человека",
+"Сегодняшний день требует от вас посещения бани с хорошим вином и кальяном, это лучший способ снять напряжение и отвлечься от забот",
+"Для стрельцов сегодня важно отправиться на природу с друзьями и кальяном, посиделки у костра помогут вам настроиться на позитив",
+"Сегодня отличный день для прогулки на машине с открытыми окнами и пивом в багажнике, дорога настроит вас на философские размышления",
+"Сегодня стрельцам лучше всего провести вечер в кафе с кальяном и бокалом вина"
+        ];
+
+        const geminiHoroscopes = [
+        "Сегодня близнецам обязательно нужно посетить Дагестан.",
+    "Будте готовы, сегодня вам не обойтись без кальяна рядом с водой на берегу.",
+    "День требует от вас максимальной концентрации в бане с пивом.",
+    "Уделите время своему здоровью, покатайтесь с горки на водохранилище.",
+    "Отличный день для творческой деятельности, нужно с Александром спокойно кататься с мышью на машине, раздавая нравоучения.",
+    "Возможно получение интересного предложения, лучше всего в жестких барах в Москве.",
+    "Не спешите с выводами, подумайте хватит ли вам только пива.",
+    "Пора петь песню золотые купола и снять кружок об этом",
+    "Близнецам по имени Анастасия нужно срочно выпить пива.",
+    "Пора пить пиво, обратитесь к Александру с данным предложением.",
+    "Сегодня близнецам обязательно нужно посетить Дагестан, не забудьте взять с собой кальян",
+"Будьте готовы, сегодня вам не обойтись без кальяна рядом с водой на берегу, это поможет вам найти гармонию",
+"День требует от вас максимальной концентрации в бане с пивом, вода и пар очистят ваши мысли",
+"Уделите время своему здоровью, покатайтесь с горки на водохранилище, это взбодрит и настроит на продуктивный день",
+"Отличный день для творческой деятельности, нужно с Александром спокойно кататься с мышью на машине, раздавая нравоучения",
+"Возможно получение интересного предложения, лучше всего в жестких барах в Москве, главное – будьте готовы к неожиданностям",
+"Не спешите с выводами, подумайте, хватит ли вам только пива, возможно, пора добавить к нему что-то более крепкое",
+"Пора петь песню 'Золотые купола' и снять кружок об этом, ваши друзья оценят такой креатив",
+"Близнецам по имени Анастасия нужно срочно выпить пива, это улучшит настроение и даст силы для дальнейших действий",
+"Пора пить пиво, обратитесь к Александру с данным предложением, он точно не откажется",
+"Сегодня близнецам рекомендуется посетить баню с друзьями и пивом, это поможет расслабиться и обсудить важные дела",
+"Ваш день пройдёт идеально, если вы проведёте его на берегу реки с кальяном и пивом, свежий воздух и вода зарядят вас энергией",
+"Звёзды советуют близнецам провести вечер в кафе с кружкой пива и философскими беседами",
+"Сегодня лучше всего провести время на прогулке по лесу с бутылкой пива, это поможет вам перезагрузиться",
+"Отличный день для поездки на дачу с кальяном и шашлыками, приглашайте друзей и отдыхайте на природе",
+"Для близнецов сегодняшний день станет продуктивным, если вы проведёте его в баре, пробуя новые сорта пива",
+"Сегодня вам нужно найти время для того, чтобы покататься на велосипеде с бутылкой пива в рюкзаке, это принесет свежие идеи",
+"Звёзды советуют вам устроить пикник на природе с пивом и кальяном, природа успокоит и даст силы для новых начинаний",
+"Сегодня вы можете встретить интересных людей, если посетите бар с кальяном в руках",
+"День обещает быть удачным, если вы проведёте его в парке с бутылкой пива, спокойствие и расслабление помогут вам принять важные решения",
+"Сегодня отличный день для того, чтобы отправиться на водоём с кальяном и гитарой, музыка и дым создадут атмосферу уюта",
+"Для близнецов сегодня важно провести вечер в компании друзей, обсуждая будущее за кружкой пива",
+"Сегодня стоит отправиться в кафе и попробовать новое блюдо под бокал пива, это откроет вам новые вкусовые горизонты",
+"Звёзды советуют вам провести время у воды с кальяном, в тишине природы вы найдёте ответы на свои вопросы",
+"Сегодня отличный день для того, чтобы устроить пикник у реки с пивом и хорошей компанией",
+"Сегодняшний вечер лучше всего провести в баре, обсуждая планы на будущее с кружкой пива",
+"Для близнецов важно сегодня посвятить день отдыху на природе с кальяном, общение с друзьями даст новые идеи",
+"Сегодня ваш день станет лучше, если вы возьмёте пиво и устроите пикник в парке",
+"Звезды рекомендуют близнецам провести время в бане с пивом, это поможет снять напряжение и обрести внутренний баланс",
+"Сегодняшний вечер идеально подходит для встречи с друзьями в баре, где можно расслабиться за кружкой пива и кальяном"
+        ];
+
+        function displayHoroscopes() {
+            const today = new Date().getDate();
+            const sagittariusIndex = today % sagittariusHoroscopes.length;
+            const geminiIndex = (today + 1) % geminiHoroscopes.length;
+
+            document.getElementById('sagittarius-horoscope').innerText = sagittariusHoroscopes[sagittariusIndex];
+            document.getElementById('gemini-horoscope').innerText = geminiHoroscopes[geminiIndex];
+        }
+        displayHoroscopes()
+    </script>
+</body>
+
+</html>
